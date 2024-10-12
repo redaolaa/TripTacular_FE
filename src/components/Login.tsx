@@ -21,7 +21,7 @@ function Login({ fetchUser }: { fetchUser: Function }) {
     e.preventDefault();
 
     try {
-      const response = await axios.post(`${baseUrl}/login`, formData);
+      const response = await axios.post(`${baseUrl}/auth/login/`, formData);
    
       localStorage.setItem("token", response.data.token);
       fetchUser(); 
