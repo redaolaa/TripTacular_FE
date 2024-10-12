@@ -5,7 +5,11 @@ import { baseUrl } from "../config";
 
 function Login({ fetchUser }: { fetchUser: Function }) {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [formData, setFormData] = useState({
+    email: "",
+    username: "",
+    password: "",
+  }); // Added username
   const [errorMessage, setErrorMessage] = useState("");
 
   function handleChange(e: SyntheticEvent) {
@@ -21,13 +25,14 @@ function Login({ fetchUser }: { fetchUser: Function }) {
     e.preventDefault();
 
     try {
+      // Make sure to send formData which now includes username
       const response = await axios.post(`${baseUrl}/auth/login/`, formData);
-   
+
       localStorage.setItem("token", response.data.token);
-      fetchUser(); 
+      fetchUser();
       navigate("/");
     } catch (error: any) {
-      setErrorMessage(error.response.data.message);
+      setErrorMessage(error.response.data.message || "An error occurred."); // Provide a default error message if none is provided
     }
   }
 
@@ -35,6 +40,7 @@ function Login({ fetchUser }: { fetchUser: Function }) {
     <div className="section">
       <div className="container">
         <form onSubmit={handleSubmit}>
+          {/* Email Field */}
           <div className="field">
             <label htmlFor="email" className="label">
               Email
@@ -50,13 +56,30 @@ function Login({ fetchUser }: { fetchUser: Function }) {
             </div>
           </div>
 
+          {/* Username Field */}
+          <div className="field">
+            <label htmlFor="username" className="label">
+              Username
+            </label>
+            <div className="control">
+              <input
+                type="text"
+                className="input"
+                name="username" // Ensure this matches the expected field in your backend
+                value={formData.username} // Bind to username in formData
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+
+          {/* Password Field */}
           <div className="field">
             <label htmlFor="password" className="label">
               Password
             </label>
             <div className="control">
               <input
-                type="text"
+                type="password" // Changed to password type for security
                 className="input"
                 name="password"
                 value={formData.password}
@@ -67,11 +90,13 @@ function Login({ fetchUser }: { fetchUser: Function }) {
               <small className="has-text-danger">{errorMessage}</small>
             )}
           </div>
+
           <button className="submit" type="submit">
             Submit
           </button>
         </form>
-        <div className="has-text-centered" style={{ marginTop: '20px' }}>
+
+        <div className="has-text-centered" style={{ marginTop: "20px" }}>
           <p>
             Don't have an account?{" "}
             <Link to="/signup" className="has-text-link">
