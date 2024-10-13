@@ -38,8 +38,8 @@ function Navbar({ user, setUser }: NavbarProps) {
                   Login
                 </Link>
               )}
-              <Link to="/posts" className="navbar-item">
-                All Tools
+              <Link to="/destinations" className="navbar-item">
+                Destinations
               </Link>
               {user && (
                 <Link to="/createPost" className="navbar-item">

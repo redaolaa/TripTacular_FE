@@ -5,16 +5,13 @@ import Navbar from "./components/Navbar";
 import Home from "./components/Home";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
-import PostList from "./components/PostList";
-import CreatePost from "./components/CreatePost";
-import ShowPost from "./components/ShowPost";
-import BlueZone from "./components/BlueZone";
-import YellowZone from "./components/YellowZone";
-import RedZone from "./components/RedZone";
-import GreenZone from "./components/GreenZone";
-import EditPost from './components/EditPost';
-import { baseUrl } from "./config";
+import DestinationList from "./components/DestinationList";
+import CreateDestination from "./components/CreateDestination";
+import ShowPost from "./components/ShowDestination";
+import EditDestComment from ".//components/EditDestComment";
 
+import EditDestination from "./components/EditDestination";
+import { baseUrl } from "./config";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -23,11 +20,12 @@ function App() {
     console.log("fetced user ");
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(`${baseUrl}/user`, {
+      const response = await axios.get(`${baseUrl}/auth/user/`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log("response.data", response);
       // response returning object but response.data is empty
+
       setUser(response.data);
     } catch (error) {
       console.log(error);
@@ -50,14 +48,16 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login fetchUser={fetchUser} />} />
 
-        <Route path="/posts" element={<PostList user={user} />} />
-        <Route path="/createPost" element={<CreatePost user={user} />} />
-        <Route path="/edit/:id" element={<EditPost user={user} />} />
-        <Route path="/post/:postId" element={<ShowPost user={user} />} />
-        <Route path="/blue-zone" element={<BlueZone user={user} />} />
-        <Route path="/red-zone" element={<RedZone user={user} />} />
-        <Route path="/yellow-zone" element={<YellowZone user={user} />} />
-        <Route path="/green-zone" element={<GreenZone user={user}/>} />
+        <Route path="/destinations" element={<DestinationList user={user} />} />
+        <Route path="/createPost" element={<CreateDestination user={user} />} />
+        <Route
+          path="/editDestination/:id"
+          element={<EditDestination user={user} />}
+        />
+        <Route
+          path="/editDestComment/:id"
+          element={<EditDestComment user={user} />}
+        />
       </Routes>
     </Router>
   );
