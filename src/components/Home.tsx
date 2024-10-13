@@ -10,16 +10,17 @@ interface Destination {
   image_url: string;
 }
 
-interface Restaurant {
+interface Hotel {
   id: number;
   name: string;
-  cuisine: string;
+  stars: string;
+  location: string;
   image_url: string;
 }
 
 function Home() {
   const [destinations, setDestinations] = useState<Destination[]>([]);
-  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const [hotels, setHotels] = useState<Hotel[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,9 +28,8 @@ function Home() {
         const destinationsResponse = await axios.get(`${baseUrl}/destinations`);
         setDestinations(destinationsResponse.data.slice(0, 3)); // Get first 3 destinations
 
-        // Assuming you have a restaurants endpoint. If not, you can mock this data.
-        const restaurantsResponse = await axios.get(`${baseUrl}/restaurants`);
-        setRestaurants(restaurantsResponse.data.slice(0, 3)); // Get first 3 restaurants
+        const hotelsResponse = await axios.get(`${baseUrl}/hotels`);
+        setHotels(hotelsResponse.data.slice(0, 3)); // Get first 3 hotels
       } catch (error) {
         console.error("Failed to fetch data:", error);
       }
@@ -45,7 +45,7 @@ function Home() {
           <div className="container">
             <h1 className="title is-1">Welcome to TravelDine</h1>
             <h2 className="subtitle">
-              Discover amazing destinations and delicious restaurants
+              Discover amazing destinations and luxurious hotels
             </h2>
           </div>
         </div>
@@ -91,27 +91,28 @@ function Home() {
         </div>
       </section>
 
-      <section className="section has-background-light">
+      <section className="section">
         <div className="container">
           <h2 className="title is-2 has-text-centered mb-6">Featured Hotels</h2>
           <div className="columns is-multiline">
-            {restaurants.map((restaurant) => (
-              <div key={restaurant.id} className="column is-4">
+            {hotels.map((hotel) => (
+              <div key={hotel.id} className="column is-4">
                 <div className="card">
                   <div className="card-image">
                     <figure className="image is-4by3">
-                      <img src={restaurant.image_url} alt={restaurant.name} />
+                      <img src={hotel.image_url} alt={hotel.name} />
                     </figure>
                   </div>
                   <div className="card-content">
-                    <p className="title is-4">{restaurant.name}</p>
-                    <p className="subtitle is-6">{restaurant.cuisine}</p>
+                    <p className="title is-4">{hotel.name}</p>
+                    <p className="subtitle is-6">{hotel.location}</p>
+                    <p className="is-6">Stars: {hotel.stars}</p>
                   </div>
                   <footer className="card-footer">
                     <Link
-                      to={`/hotels/${restaurant.id}`}
+                      to={`/hotels/${hotel.id}`}
                       className="card-footer-item">
-                      View Menu
+                      View Details
                     </Link>
                   </footer>
                 </div>
