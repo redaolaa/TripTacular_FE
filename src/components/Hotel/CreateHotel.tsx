@@ -4,19 +4,18 @@ import { IUser } from "../../interfaces/user";
 import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../../config";
 
-function CreateDestination({ user }: { user: null | IUser }) {
+function CreateHotel({ user }: { user: null | IUser }) {
   const [formData, setFormData] = useState({
-    country: "",
-    city: "",
-    date_from: "",
-    date_to: "",
+    name: "",
+    stars: "",
+    location: "",
     image_url: "",
   });
+
   const [errorData, setErrorData] = useState({
-    country: "",
-    city: "",
-    date_from: "",
-    date_to: "",
+    name: "",
+    stars: "",
+    location: "",
     image_url: "",
   });
 
@@ -27,21 +26,27 @@ function CreateDestination({ user }: { user: null | IUser }) {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.post(
-        `${baseUrl}/destinations/`,
-        {
-          ...formData,
-          owner: user?.id || 1,
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const ownerId = user?.id || 1;
+
+      const payload = {
+        ...formData,
+        owner: ownerId,
+      };
+
+      console.log("Payload being sent:", payload);
+
+      const response = await axios.post(`${baseUrl}/hotels/`, payload, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       console.log("RESPONSE IS: ", response);
-      navigate("/destinations/");
+      navigate("/hotels/");
     } catch (error: any) {
       console.log("THE ERROR IS: ", error);
       if (error.response && error.response.data && error.response.data.errors) {
         setErrorData(error.response.data.errors);
+      } else {
+        console.error("Unexpected error:", error);
       }
     }
   }
@@ -55,82 +60,64 @@ function CreateDestination({ user }: { user: null | IUser }) {
   return (
     <div className="section">
       <div className="container">
-        <h1 className="title">Create a New Destination</h1>
+        <h1 className="title">Create a New Hotel</h1>
         <form onSubmit={handleSubmit}>
-          {/* Country Field */}
+          {/* Hotel Name Field */}
           <div className="field">
-            <label htmlFor="country" className="label">
-              Country
+            <label htmlFor="name" className="label">
+              Hotel Name
             </label>
             <div className="control">
               <input
                 type="text"
-                className={`input ${errorData.country ? "is-danger" : ""}`}
-                name="country"
-                placeholder="Enter the country"
-                value={formData.country}
+                className={`input ${errorData.name ? "is-danger" : ""}`}
+                name="name"
+                placeholder="Enter the hotel name"
+                value={formData.name}
                 onChange={handleChange}
               />
-              {errorData.country && (
-                <p className="help is-danger">{errorData.country}</p>
+              {errorData.name && (
+                <p className="help is-danger">{errorData.name}</p>
               )}
             </div>
           </div>
 
-          {/* City Field */}
+          {/* Stars Field */}
           <div className="field">
-            <label htmlFor="city" className="label">
-              City
+            <label htmlFor="stars" className="label">
+              Hotel Stars (Rating)
             </label>
             <div className="control">
               <input
                 type="text"
-                className={`input ${errorData.city ? "is-danger" : ""}`}
-                name="city"
-                placeholder="Enter the city"
-                value={formData.city}
+                className={`input ${errorData.stars ? "is-danger" : ""}`}
+                name="stars"
+                placeholder="Enter the stars (1-5)"
+                value={formData.stars}
                 onChange={handleChange}
               />
-              {errorData.city && (
-                <p className="help is-danger">{errorData.city}</p>
+              {errorData.stars && (
+                <p className="help is-danger">{errorData.stars}</p>
               )}
             </div>
           </div>
 
-          {/* Date From Field */}
+          {/* Location Field */}
           <div className="field">
-            <label htmlFor="date_from" className="label">
-              Date From
+            <label htmlFor="location" className="label">
+              Location
             </label>
             <div className="control">
               <input
-                type="date"
-                className={`input ${errorData.date_from ? "is-danger" : ""}`}
-                name="date_from"
-                value={formData.date_from}
+                type="text"
+                className={`input ${errorData.location ? "is-danger" : ""}`}
+                name="location"
+                placeholder="Enter the location (e.g., Malibu, California)"
+                value={formData.location}
                 onChange={handleChange}
               />
-              {errorData.date_from && (
-                <p className="help is-danger">{errorData.date_from}</p>
-              )}
-            </div>
-          </div>
-
-          {/* Date To Field */}
-          <div className="field">
-            <label htmlFor="date_to" className="label">
-              Date To
-            </label>
-            <div className="control">
-              <input
-                type="date"
-                className={`input ${errorData.date_to ? "is-danger" : ""}`}
-                name="date_to"
-                value={formData.date_to}
-                onChange={handleChange}
-              />
-              {errorData.date_to && (
-                <p className="help is-danger">{errorData.date_to}</p>
+              {errorData.location && (
+                <p className="help is-danger">{errorData.location}</p>
               )}
             </div>
           </div>
@@ -169,4 +156,4 @@ function CreateDestination({ user }: { user: null | IUser }) {
   );
 }
 
-export default CreateDestination;
+export default CreateHotel;

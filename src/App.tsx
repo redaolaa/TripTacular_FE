@@ -13,6 +13,9 @@ import EditDestination from "./components/EditDestination";
 import { baseUrl } from "./config";
 import CreateDestComment from "./components/Destination/CreateDestComment";
 import HotelList from "./components/Hotel/HotelList";
+import CreateHotel from "./components/Hotel/createHotel";
+import CreateHotelComment from "./components/Hotel/CreateHotelComments";
+import EditHotel from "./components/Hotel/EditHotel";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -75,6 +78,15 @@ function App() {
 
         {/* HOTELS */}
         <Route path="/hotels" element={<HotelList user={user} />} />
+
+        <Route path="/createHotel" element={<CreateHotel user={user} />} />
+
+        <Route
+          path="/createHotelComment/:id"
+          element={<CreateHotelComment user={user} />}
+        />
+
+        <Route path="/editHotel/:id" element={<EditHotel user={user} />} />
 
         <Route
           path="/editHotelComment/:id"

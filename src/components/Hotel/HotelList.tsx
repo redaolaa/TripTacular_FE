@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../../config";
-import DeleteModal from "../DeleteModal";
+import DeleteHotelModal from "../Hotel/DeleteHotelModal";
 
 interface IUser {
   id: number;
@@ -16,17 +16,16 @@ type Comment = {
   created_at: string;
   updated_at: string;
   image_url: string;
-  destination: number;
+  hotel: number;
   owner: number;
 };
 
 type Post = {
   id: number;
-  comments: Comment[];
-  country: string;
-  city: string;
-  date_from: string;
-  date_to: string;
+  hotel_comments: Comment[];
+  name: string;
+  stars: string;
+  location: string;
   image_url: string;
   owner: number;
 };
@@ -38,7 +37,7 @@ function HotelList({ user }: { user: null | IUser }) {
   const [error, setError] = useState<string | null>(null);
   const [itemToDelete, setItemToDelete] = useState<{
     id: number;
-    type: "comment" | "hotel";
+    type: "hotel_comment" | "hotel";
   } | null>(null);
   const navigate = useNavigate();
 
@@ -61,7 +60,7 @@ function HotelList({ user }: { user: null | IUser }) {
   };
 
   const handleAddHotelClick = () => {
-    navigate("/createPost");
+    navigate("/createHotel");
   };
 
   const handleEditClick = (id: number) => {
@@ -76,16 +75,16 @@ function HotelList({ user }: { user: null | IUser }) {
     navigate(`/createHotelComment/${id}`);
   };
 
-  const handleDeleteClick = (id: number, type: "comment" | "hotel") => {
+  const handleDeleteClick = (id: number, type: "hotel_comment" | "hotel") => {
     setItemToDelete({ id, type });
   };
 
   const handleDeleteSuccess = (deletedItemId: number) => {
-    if (itemToDelete?.type === "comment") {
+    if (itemToDelete?.type === "hotel_comment") {
       setPosts((prevPosts) =>
         prevPosts.map((post) => ({
           ...post,
-          comments: post.comments.filter(
+          hotel_comments: post.hotel_comments.filter(
             (comment) => comment.id !== deletedItemId
           ),
         }))
@@ -103,7 +102,7 @@ function HotelList({ user }: { user: null | IUser }) {
   }
 
   if (posts.length === 0) {
-    return <div className="notification is-warning">No posts available.</div>;
+    return <div className="notification is-warning">No hotels available.</div>;
   }
 
   return (
@@ -111,7 +110,7 @@ function HotelList({ user }: { user: null | IUser }) {
       <div className="container">
         <div className="has-text-centered mb-4">
           <button onClick={handleAddHotelClick} className="button is-primary">
-            Add Destination
+            Add Hotel
           </button>
         </div>
 
@@ -121,19 +120,17 @@ function HotelList({ user }: { user: null | IUser }) {
               <div className="card">
                 <div className="card-image">
                   <figure className="image is-4by3">
-                    <img
-                      src={post.image_url}
-                      alt={`${post.city}, ${post.country}`}
-                    />
+                    <img src={post.image_url} alt={post.name} />
                   </figure>
                 </div>
                 <div className="card-content">
-                  <h2 className="title is-4">
-                    {post.city}, {post.country}
-                  </h2>
-                  {post.comments.length > 0 ? (
-                    post.comments.map((comment) => (
+                  <h2 className="title is-4">{post.name}</h2>
+                  <p>{post.location}</p>
+                  <p>Stars: {post.stars}</p>
+                  {post.hotel_comments.length > 0 ? (
+                    post.hotel_comments.map((comment) => (
                       <div key={comment.id} className="content">
+                        <section>Review</section>
                         <p>{comment.review}</p>
                         {comment.image_url && (
                           <figure className="image is-128x128">
@@ -149,7 +146,7 @@ function HotelList({ user }: { user: null | IUser }) {
                           <button
                             className="button is-small is-danger"
                             onClick={() =>
-                              handleDeleteClick(comment.id, "comment")
+                              handleDeleteClick(comment.id, "hotel_comment")
                             }>
                             Delete Comment
                           </button>
@@ -158,19 +155,19 @@ function HotelList({ user }: { user: null | IUser }) {
                     ))
                   ) : (
                     <p className="content has-text-grey">
-                      No reviews available for this destination.
+                      No reviews available for this hotel.
                     </p>
                   )}
                   <div className="buttons is-centered mt-2">
                     <button
                       className="button is-info"
                       onClick={() => handleEditClick(post.id)}>
-                      Edit Destination
+                      Edit Hotel
                     </button>
                     <button
                       className="button is-danger"
                       onClick={() => handleDeleteClick(post.id, "hotel")}>
-                      Delete Destination
+                      Delete Hotel
                     </button>
                     <button
                       className="button is-success"
@@ -191,12 +188,11 @@ function HotelList({ user }: { user: null | IUser }) {
         </div>
       </div>
       {itemToDelete && (
-        <DeleteModal
+        <DeleteHotelModal
           itemId={itemToDelete.id}
           itemType={itemToDelete.type}
           onClose={() => setItemToDelete(null)}
           onDeleteSuccess={handleDeleteSuccess}
-          apiEndpoint={`${baseUrl}/hotels`}
         />
       )}
     </section>

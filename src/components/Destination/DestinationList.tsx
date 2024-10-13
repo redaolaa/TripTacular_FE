@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../../config";
-import DeleteModal from "../DeleteModal";
+import DeleteModal from "./DeleteDestModal";
 
 interface IUser {
   id: number;

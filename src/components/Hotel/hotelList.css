@@ -1,0 +1,15 @@
+.comment-container {
+  position: relative;
+}
+
+.comment-buttons {
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.comment-container:hover .comment-buttons {
+  opacity: 1;
+}
