@@ -1,8 +1,8 @@
 import { useState, SyntheticEvent } from "react";
 import axios from "axios";
-import { IUser } from "../interfaces/user";
+import { IUser } from "../../interfaces/user";
 import { useNavigate } from "react-router-dom";
-import { baseUrl } from "../config";
+import { baseUrl } from "../../config";
 
 function CreateDestination({ user }: { user: null | IUser }) {
   const [formData, setFormData] = useState({

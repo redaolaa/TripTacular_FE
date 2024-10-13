@@ -5,14 +5,14 @@ import Navbar from "./components/Navbar";
 import Home from "./components/Home";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
-import DestinationList from "./components/DestinationList";
-import CreateDestination from "./components/CreateDestination";
-import ShowPost from "./components/ShowDestination";
-import EditDestComment from ".//components/EditDestComment";
+import DestinationList from "./components/Destination/DestinationList";
+import CreateDestination from "./components/Destination/CreateDestination";
+import EditComment from "./components/EditComment";
 
 import EditDestination from "./components/EditDestination";
 import { baseUrl } from "./config";
-import CreateDestComment from "./components/CreateDestComment";
+import CreateDestComment from "./components/Destination/CreateDestComment";
+import HotelList from "./components/Hotel/HotelList";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -49,20 +49,41 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login fetchUser={fetchUser} />} />
 
+        {/* DESTINATIONS */}
         <Route path="/destinations" element={<DestinationList user={user} />} />
         <Route path="/createPost" element={<CreateDestination user={user} />} />
+
         <Route
           path="/editDestination/:id"
           element={<EditDestination user={user} />}
         />
+
         <Route
-          path="/editDestComment/:id"
-          element={<EditDestComment user={user} />}
+          path="/createDestComment/:id"
+          element={<CreateDestComment user={user} />}
         />
 
         <Route
-          path="/createDestComment/:destinationId"
-          element={<CreateDestComment user={user} />}
+          path="/editDestComment/:id"
+          element={
+            <EditComment
+              apiEndpoint={`${baseUrl}/destination_comments`}
+              redirectPath="/destinations"
+            />
+          }
+        />
+
+        {/* HOTELS */}
+        <Route path="/hotels" element={<HotelList user={user} />} />
+
+        <Route
+          path="/editHotelComment/:id"
+          element={
+            <EditComment
+              apiEndpoint={`${baseUrl}/hotel_comments`}
+              redirectPath="/hotels"
+            />
+          }
         />
       </Routes>
     </Router>

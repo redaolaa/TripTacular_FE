@@ -1,39 +1,165 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { baseUrl } from "../config";
 
+interface Destination {
+  id: number;
+  city: string;
+  country: string;
+  image_url: string;
+}
+
+interface Restaurant {
+  id: number;
+  name: string;
+  cuisine: string;
+  image_url: string;
+}
 
 function Home() {
-  // State to manage which zone's details are shown
-  const [activeZone, setActiveZone] = useState<string | null>(null);
-  const navigate = useNavigate();
+  const [destinations, setDestinations] = useState<Destination[]>([]);
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
 
-  const handleZoneClick = (link: string) => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      navigate(link); // Navigate to the zone page if logged in
-    } else {
-      navigate("/login"); // Redirect to the login page if not logged in
-    }
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const destinationsResponse = await axios.get(`${baseUrl}/destinations`);
+        setDestinations(destinationsResponse.data.slice(0, 3)); // Get first 3 destinations
+
+        // Assuming you have a restaurants endpoint. If not, you can mock this data.
+        const restaurantsResponse = await axios.get(`${baseUrl}/restaurants`);
+        setRestaurants(restaurantsResponse.data.slice(0, 3)); // Get first 3 restaurants
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
-    <div>
-      {/* Zones Description with Images */}
-      <div className="section">
-        <div className="container">
-          <h1 className="title has-text-centered">TripTastic</h1>
-          <div className="content has-text-centered">
-            <p>
-            Travel Recommendations
-            </p>
+    <div className="homepage">
+      <section className="hero is-primary is-bold">
+        <div className="hero-body">
+          <div className="container">
+            <h1 className="title is-1">Welcome to TravelDine</h1>
+            <h2 className="subtitle">
+              Discover amazing destinations and delicious restaurants
+            </h2>
           </div>
-
-       
-         
-
-         
         </div>
-      </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <h2 className="title is-2 has-text-centered mb-6">
+            Popular Destinations
+          </h2>
+          <div className="columns is-multiline">
+            {destinations.map((destination) => (
+              <div key={destination.id} className="column is-4">
+                <div className="card">
+                  <div className="card-image">
+                    <figure className="image is-4by3">
+                      <img
+                        src={destination.image_url}
+                        alt={`${destination.city}, ${destination.country}`}
+                      />
+                    </figure>
+                  </div>
+                  <div className="card-content">
+                    <p className="title is-4">{destination.city}</p>
+                    <p className="subtitle is-6">{destination.country}</p>
+                  </div>
+                  <footer className="card-footer">
+                    <Link
+                      to={`/destinations/${destination.id}`}
+                      className="card-footer-item">
+                      View Details
+                    </Link>
+                  </footer>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="has-text-centered mt-6">
+            <Link to="/destinations" className="button is-primary is-large">
+              View All Destinations
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="section has-background-light">
+        <div className="container">
+          <h2 className="title is-2 has-text-centered mb-6">Featured Hotels</h2>
+          <div className="columns is-multiline">
+            {restaurants.map((restaurant) => (
+              <div key={restaurant.id} className="column is-4">
+                <div className="card">
+                  <div className="card-image">
+                    <figure className="image is-4by3">
+                      <img src={restaurant.image_url} alt={restaurant.name} />
+                    </figure>
+                  </div>
+                  <div className="card-content">
+                    <p className="title is-4">{restaurant.name}</p>
+                    <p className="subtitle is-6">{restaurant.cuisine}</p>
+                  </div>
+                  <footer className="card-footer">
+                    <Link
+                      to={`/hotels/${restaurant.id}`}
+                      className="card-footer-item">
+                      View Menu
+                    </Link>
+                  </footer>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="has-text-centered mt-6">
+            <Link to="/hotels" className="button is-primary is-large">
+              Explore All Hotels
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <style jsx>{`
+        .homepage .card {
+          transition: all 0.3s ease;
+          border-radius: 8px;
+          overflow: hidden;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .homepage .card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .homepage .card-image img {
+          object-fit: cover;
+        }
+        .homepage .title.is-2 {
+          position: relative;
+          display: inline-block;
+        }
+        .homepage .title.is-2::after {
+          content: "";
+          position: absolute;
+          left: 0;
+          bottom: -10px;
+          width: 100%;
+          height: 3px;
+          background-color: #3273dc;
+        }
+        .homepage .button.is-large {
+          transition: all 0.3s ease;
+        }
+        .homepage .button.is-large:hover {
+          transform: scale(1.05);
+        }
+      `}</style>
     </div>
   );
 }

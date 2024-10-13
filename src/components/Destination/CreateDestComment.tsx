@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
-import { baseUrl } from "../config";
+import { baseUrl } from "../../config";
 
 function CreateDestComment() {
-  const { destinationId } = useParams<{ destinationId: string }>();
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [comment, setComment] = useState({
     review: "",
@@ -32,7 +32,7 @@ function CreateDestComment() {
       const commentData = {
         review: comment.review,
         image_url: comment.image_url || null,
-        destination: parseInt(destinationId),
+        destination: parseInt(id),
         owner: 1, // Set owner to 1 as requested
       };
 

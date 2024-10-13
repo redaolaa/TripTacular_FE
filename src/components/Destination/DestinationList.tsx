@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { baseUrl } from "../config";
+import { baseUrl } from "../../config";
+import DeleteModal from "../DeleteModal";
 
 interface IUser {
   id: number;
@@ -35,6 +36,10 @@ type Posts = Post[];
 function DestinationList({ user }: { user: null | IUser }) {
   const [posts, setPosts] = useState<Posts>([]);
   const [error, setError] = useState<string | null>(null);
+  const [itemToDelete, setItemToDelete] = useState<{
+    id: number;
+    type: "comment" | "destination";
+  } | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -51,14 +56,6 @@ function DestinationList({ user }: { user: null | IUser }) {
     fetchPosts();
   }, []);
 
-  if (error) {
-    return <div className="notification is-danger">{error}</div>;
-  }
-
-  if (posts.length === 0) {
-    return <div className="notification is-warning">No posts available.</div>;
-  }
-
   const handleHomeClick = () => {
     navigate("/");
   };
@@ -71,13 +68,43 @@ function DestinationList({ user }: { user: null | IUser }) {
     navigate(`/editDestination/${id}`);
   };
 
-  const handleEditCommentClick = (commentId: number) => {
-    navigate(`/editDestComment/${commentId}`);
+  const handleEditCommentClick = (id: number) => {
+    navigate(`/editDestComment/${id}`);
   };
 
-  const handleAddCommentClick = (destinationId: number) => {
-    navigate(`/createDestComment/${destinationId}`);
+  const handleAddCommentClick = (id: number) => {
+    navigate(`/createDestComment/${id}`);
   };
+
+  const handleDeleteClick = (id: number, type: "comment" | "destination") => {
+    setItemToDelete({ id, type });
+  };
+
+  const handleDeleteSuccess = (deletedItemId: number) => {
+    if (itemToDelete?.type === "comment") {
+      setPosts((prevPosts) =>
+        prevPosts.map((post) => ({
+          ...post,
+          comments: post.comments.filter(
+            (comment) => comment.id !== deletedItemId
+          ),
+        }))
+      );
+    } else if (itemToDelete?.type === "destination") {
+      setPosts((prevPosts) =>
+        prevPosts.filter((post) => post.id !== deletedItemId)
+      );
+    }
+    setItemToDelete(null);
+  };
+
+  if (error) {
+    return <div className="notification is-danger">{error}</div>;
+  }
+
+  if (posts.length === 0) {
+    return <div className="notification is-warning">No posts available.</div>;
+  }
 
   return (
     <section className="section">
@@ -121,6 +148,13 @@ function DestinationList({ user }: { user: null | IUser }) {
                             onClick={() => handleEditCommentClick(comment.id)}>
                             Edit Comment
                           </button>
+                          <button
+                            className="button is-small is-danger"
+                            onClick={() =>
+                              handleDeleteClick(comment.id, "comment")
+                            }>
+                            Delete Comment
+                          </button>
                         </div>
                       </div>
                     ))
@@ -134,6 +168,11 @@ function DestinationList({ user }: { user: null | IUser }) {
                       className="button is-info"
                       onClick={() => handleEditClick(post.id)}>
                       Edit Destination
+                    </button>
+                    <button
+                      className="button is-danger"
+                      onClick={() => handleDeleteClick(post.id, "destination")}>
+                      Delete Destination
                     </button>
                     <button
                       className="button is-success"
@@ -153,6 +192,14 @@ function DestinationList({ user }: { user: null | IUser }) {
           </button>
         </div>
       </div>
+      {itemToDelete && (
+        <DeleteModal
+          itemId={itemToDelete.id}
+          itemType={itemToDelete.type}
+          onClose={() => setItemToDelete(null)}
+          onDeleteSuccess={handleDeleteSuccess}
+        />
+      )}
     </section>
   );
 }

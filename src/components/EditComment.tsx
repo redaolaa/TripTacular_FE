@@ -1,25 +1,29 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
-import { baseUrl } from "../config";
 
 type Comment = {
   id: number;
   review: string;
   image_url: string;
-  destination: number;
+  destination?: number;
+  hotel?: number;
   owner: number;
 };
 
-function EditDestComment() {
+interface EditCommentProps {
+  apiEndpoint: string;
+  redirectPath: string;
+}
+
+function EditComment({ apiEndpoint, redirectPath }: EditCommentProps) {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [comment, setComment] = useState<Comment>({
     id: 0,
     review: "",
     image_url: "",
-    destination: 0,
-    owner: 1,
+    owner: 1, // Assuming 1 is the default owner for now
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -28,12 +32,9 @@ function EditDestComment() {
     const fetchComment = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get(
-          `${baseUrl}/destination_comments/${id}/`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const response = await axios.get(`${apiEndpoint}/${id}/`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setComment(response.data);
         setLoading(false);
       } catch (error) {
@@ -44,7 +45,7 @@ function EditDestComment() {
     };
 
     fetchComment();
-  }, [id]);
+  }, [id, apiEndpoint]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -57,13 +58,13 @@ function EditDestComment() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`${baseUrl}/destination_comments/${id}/`, comment, {
+      await axios.put(`${apiEndpoint}/${id}/`, comment, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
-      navigate(`/destinations`);
+      navigate(redirectPath);
     } catch (error) {
       console.error("Error updating comment:", error);
       setError("Failed to update comment");
@@ -124,7 +125,7 @@ function EditDestComment() {
               <button
                 type="button"
                 className="button is-link is-light"
-                onClick={() => navigate("/destinations")}>
+                onClick={() => navigate(redirectPath)}>
                 Cancel
               </button>
             </div>
@@ -135,4 +136,4 @@ function EditDestComment() {
   );
 }
 
-export default EditDestComment;
+export default EditComment;
