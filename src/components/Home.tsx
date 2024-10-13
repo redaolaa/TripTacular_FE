@@ -72,13 +72,6 @@ function Home() {
                     <p className="title is-4">{destination.city}</p>
                     <p className="subtitle is-6">{destination.country}</p>
                   </div>
-                  <footer className="card-footer">
-                    <Link
-                      to={`/destinations/${destination.id}`}
-                      className="card-footer-item">
-                      View Details
-                    </Link>
-                  </footer>
                 </div>
               </div>
             ))}
@@ -108,13 +101,6 @@ function Home() {
                     <p className="subtitle is-6">{hotel.location}</p>
                     <p className="is-6">Stars: {hotel.stars}</p>
                   </div>
-                  <footer className="card-footer">
-                    <Link
-                      to={`/hotels/${hotel.id}`}
-                      className="card-footer-item">
-                      View Details
-                    </Link>
-                  </footer>
                 </div>
               </div>
             ))}
