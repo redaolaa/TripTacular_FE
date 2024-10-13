@@ -19,7 +19,7 @@ function EditDestComment() {
     review: "",
     image_url: "",
     destination: 0,
-    owner: 0,
+    owner: 1,
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

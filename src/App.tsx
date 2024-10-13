@@ -12,6 +12,7 @@ import EditDestComment from ".//components/EditDestComment";
 
 import EditDestination from "./components/EditDestination";
 import { baseUrl } from "./config";
+import CreateDestComment from "./components/CreateDestComment";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -57,6 +58,11 @@ function App() {
         <Route
           path="/editDestComment/:id"
           element={<EditDestComment user={user} />}
+        />
+
+        <Route
+          path="/createDestComment/:destinationId"
+          element={<CreateDestComment user={user} />}
         />
       </Routes>
     </Router>

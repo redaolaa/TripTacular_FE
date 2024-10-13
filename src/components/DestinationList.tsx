@@ -1,10 +1,14 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { IUser } from "../interfaces/user";
 import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../config";
 
-// Define types for comments and posts
+interface IUser {
+  id: number;
+  username: string;
+  // Add other user properties as needed
+}
+
 type Comment = {
   id: number;
   review: string;
@@ -71,6 +75,10 @@ function DestinationList({ user }: { user: null | IUser }) {
     navigate(`/editDestComment/${commentId}`);
   };
 
+  const handleAddCommentClick = (destinationId: number) => {
+    navigate(`/createDestComment/${destinationId}`);
+  };
+
   return (
     <section className="section">
       <div className="container">
@@ -121,11 +129,16 @@ function DestinationList({ user }: { user: null | IUser }) {
                       No reviews available for this destination.
                     </p>
                   )}
-                  <div className="has-text-centered mt-2">
+                  <div className="buttons is-centered mt-2">
                     <button
                       className="button is-info"
                       onClick={() => handleEditClick(post.id)}>
                       Edit Destination
+                    </button>
+                    <button
+                      className="button is-success"
+                      onClick={() => handleAddCommentClick(post.id)}>
+                      Add Comment
                     </button>
                   </div>
                 </div>
