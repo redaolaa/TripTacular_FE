@@ -1,23 +1,34 @@
 import { Link, useNavigate } from "react-router-dom";
-import { IUser } from "../interfaces/user";
-import { useState } from "react";
-import "../App.css"
+import axios from "axios";
+import "../App.css";
 
 interface NavbarProps {
-  user: null | IUser;
   setUser: Function;
 }
 
-function Navbar({ user, setUser }: NavbarProps) {
+function Navbar({ setUser }: NavbarProps) {
   const navigate = useNavigate();
 
-  function logout() {
-    localStorage.removeItem("token");
-    setUser(null);
-    navigate("/");
-  }
+  // Check if token exists in localStorage
+  const token = localStorage.getItem("token");
 
-  console.log("user", user);
+  async function logout() {
+    try {
+      // Make an API call to log out if needed (optional, depending on your backend)
+      await axios.post("/auth/logout"); // Example logout endpoint if your backend supports it
+
+      // Remove token from localStorage
+      localStorage.removeItem("token");
+
+      // Clear user state
+      setUser(null);
+
+      // Navigate back to home
+      navigate("/");
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+  }
 
   return (
     <>
@@ -28,12 +39,12 @@ function Navbar({ user, setUser }: NavbarProps) {
               <Link to="/" className="navbar-item">
                 Home
               </Link>
-              {!user && (
+              {!token && (
                 <Link to="/signup" className="navbar-item">
                   Signup
                 </Link>
               )}
-              {!user && (
+              {!token && (
                 <Link to="/login" className="navbar-item">
                   Login
                 </Link>
@@ -41,26 +52,21 @@ function Navbar({ user, setUser }: NavbarProps) {
               <Link to="/destinations" className="navbar-item">
                 Destinations
               </Link>
-              {/* Added the Hotels link */}
               <Link to="/hotels" className="navbar-item">
                 Hotels
               </Link>
-              {user && (
-                <Link to="/createPost" className="navbar-item">
-                  Create Tools
-                </Link>
-              )}
 
-              {user && (
-                <button
-                  onClick={logout}
-                  className="button navbar-item is-ghost">
-                  Logout
-                </button>
-              )}
-
-              {user && (
-                <span className="navbar-item navbar-welcome">{`Welcome back ${user.username}`}</span>
+              {/* Show logout link only if token exists */}
+              {token && (
+                <>
+                
+                  <Link
+                    to="/"
+                    className="navbar-item" // same className as other nav items
+                    onClick={logout}>
+                    Logout
+                  </Link>
+                </>
               )}
             </div>
           </div>
