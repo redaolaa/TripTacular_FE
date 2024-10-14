@@ -23,19 +23,26 @@ function Home() {
   const [hotels, setHotels] = useState<Hotel[]>([]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchDestinations = async () => {
       try {
-        const destinationsResponse = await axios.get(`${baseUrl}/destinations`);
-        setDestinations(destinationsResponse.data.slice(0, 3)); // Get first 3 destinations
-
-        const hotelsResponse = await axios.get(`${baseUrl}/hotels`);
-        setHotels(hotelsResponse.data.slice(0, 3)); // Get first 3 hotels
+        const response = await axios.get(`${baseUrl}/destinations`);
+        setDestinations(response.data.slice(0, 3)); // Get first 3 destinations
       } catch (error) {
-        console.error("Failed to fetch data:", error);
+        console.error("Failed to fetch destinations:", error);
       }
     };
 
-    fetchData();
+    const fetchHotels = async () => {
+      try {
+        const response = await axios.get(`${baseUrl}/hotels`);
+        setHotels(response.data.slice(0, 3)); // Get first 3 hotels
+      } catch (error) {
+        console.error("Failed to fetch hotels:", error);
+      }
+    };
+
+    fetchDestinations();
+    fetchHotels();
   }, []);
 
   return (
@@ -43,9 +50,10 @@ function Home() {
       <section className="hero is-primary is-bold">
         <div className="hero-body">
           <div className="container">
-            <h1 className="title is-1">Welcome to TravelDine</h1>
+            <h1 className="title is-1"> TripTastic</h1>
             <h2 className="subtitle">
-              Discover amazing destinations and luxurious hotels
+              Your personal travel journal: Capturing destinations and
+              accommodations
             </h2>
           </div>
         </div>
@@ -53,9 +61,7 @@ function Home() {
 
       <section className="section">
         <div className="container">
-          <h2 className="title is-2 has-text-centered mb-6">
-            Popular Destinations
-          </h2>
+          <h2 className="title is-2 has-text-centered mb-6">Destinations</h2>
           <div className="columns is-multiline">
             {destinations.map((destination) => (
               <div key={destination.id} className="column is-4">
@@ -77,7 +83,7 @@ function Home() {
             ))}
           </div>
           <div className="has-text-centered mt-6">
-            <Link to="/destinations" className="button is-primary is-large">
+            <Link to="/destinations" className="button is-primary">
               View All Destinations
             </Link>
           </div>
@@ -86,7 +92,7 @@ function Home() {
 
       <section className="section">
         <div className="container">
-          <h2 className="title is-2 has-text-centered mb-6">Featured Hotels</h2>
+          <h2 className="title is-2 has-text-centered mb-6">Hotels</h2>
           <div className="columns is-multiline">
             {hotels.map((hotel) => (
               <div key={hotel.id} className="column is-4">
@@ -99,14 +105,14 @@ function Home() {
                   <div className="card-content">
                     <p className="title is-4">{hotel.name}</p>
                     <p className="subtitle is-6">{hotel.location}</p>
-                    <p className="is-6">Stars: {hotel.stars}</p>
+                    {/* <p className="is-6">Stars: {hotel.stars}</p> */}
                   </div>
                 </div>
               </div>
             ))}
           </div>
           <div className="has-text-centered mt-6">
-            <Link to="/hotels" className="button is-primary is-large">
+            <Link to="/hotels" className="button is-primary">
               Explore All Hotels
             </Link>
           </div>
@@ -140,10 +146,10 @@ function Home() {
           height: 3px;
           background-color: #3273dc;
         }
-        .homepage .button.is-large {
+        .homepage .button {
           transition: all 0.3s ease;
         }
-        .homepage .button.is-large:hover {
+        .homepage .button:hover {
           transform: scale(1.05);
         }
       `}</style>

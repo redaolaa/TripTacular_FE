@@ -3,11 +3,12 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../../config";
 import DeleteHotelModal from "../Hotel/DeleteHotelModal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 
 interface IUser {
   id: number;
   username: string;
-  // Add other user properties as needed
 }
 
 type Comment = {
@@ -39,6 +40,7 @@ function HotelList({ user }: { user: null | IUser }) {
     id: number;
     type: "hotel_comment" | "hotel";
   } | null>(null);
+  const [hoveredButton, setHoveredButton] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -97,6 +99,24 @@ function HotelList({ user }: { user: null | IUser }) {
     setItemToDelete(null);
   };
 
+  const renderStars = (starCount: string) => {
+    const stars = parseInt(starCount);
+    return (
+      <div className="stars">
+        {Array.from({ length: stars }, (_, index) => (
+          <span key={index} className="has-text-warning">
+            ★
+          </span>
+        ))}
+        {Array.from({ length: 5 - stars }, (_, index) => (
+          <span key={index} className="has-text-grey-light">
+            ★
+          </span>
+        ))}
+      </div>
+    );
+  };
+
   if (error) {
     return <div className="notification is-danger">{error}</div>;
   }
@@ -109,15 +129,72 @@ function HotelList({ user }: { user: null | IUser }) {
     <section className="section">
       <div className="container">
         <div className="has-text-centered mb-4">
-          <button onClick={handleAddHotelClick} className="button is-primary">
-            Add Hotel
+          <button
+            onClick={handleAddHotelClick}
+            className="button is-primary is-rounded has-text-weight-bold">
+            <FontAwesomeIcon icon={faPlusCircle} /> Add Hotel
           </button>
         </div>
 
         <div className="columns is-multiline">
           {posts.map((post) => (
             <div key={post.id} className="column is-one-third">
-              <div className="card">
+              <div className="card" style={{ position: "relative" }}>
+                {/* Delete Button with "X" */}
+                <button
+                  className="delete is-danger"
+                  onClick={() => handleDeleteClick(post.id, "hotel")}
+                  style={{
+                    position: "absolute",
+                    top: "10px",
+                    right: "10px",
+                    zIndex: 10,
+                    border: "none",
+                    background: "transparent",
+                    padding: 0,
+                    fontSize: "20px",
+                  }}
+                  onMouseEnter={() => setHoveredButton(`delete-${post.id}`)}
+                  onMouseLeave={() => setHoveredButton(null)}
+                  aria-label="Delete Hotel">
+                  <span
+                    style={{
+                      color:
+                        hoveredButton === `delete-${post.id}`
+                          ? "red"
+                          : "inherit",
+                    }}>
+                    X
+                  </span>
+                </button>
+
+                {/* Edit Button */}
+                <button
+                  className="button is-light"
+                  onClick={() => handleEditClick(post.id)}
+                  style={{
+                    position: "absolute",
+                    top: "10px",
+                    right: "50px",
+                    zIndex: 10,
+                    border: "none",
+                    background: "transparent",
+                    padding: 0,
+                  }}
+                  onMouseEnter={() => setHoveredButton(`edit-${post.id}`)}
+                  onMouseLeave={() => setHoveredButton(null)}
+                  aria-label="Edit Hotel">
+                  <FontAwesomeIcon
+                    icon={faPen}
+                    style={{
+                      color:
+                        hoveredButton === `edit-${post.id}`
+                          ? "orange"
+                          : "inherit",
+                    }}
+                  />
+                </button>
+
                 <div className="card-image">
                   <figure className="image is-4by3">
                     <img src={post.image_url} alt={post.name} />
@@ -126,31 +203,57 @@ function HotelList({ user }: { user: null | IUser }) {
                 <div className="card-content">
                   <h2 className="title is-4">{post.name}</h2>
                   <p>{post.location}</p>
-                  <p>Stars: {post.stars}</p>
+                  <p>{renderStars(post.stars)}</p>
                   {post.hotel_comments.length > 0 ? (
                     post.hotel_comments.map((comment) => (
-                      <div key={comment.id} className="content">
-                        <section>Review</section>
-                        <p>{comment.review}</p>
+                      <div key={comment.id} className="content mb-3">
+                        <section className="is-flex is-align-items-center">
+                          <p className="mr-3">{comment.review}</p>
+                          <div className="buttons is-right ml-2">
+                            <button
+                              className="button is-light is-small"
+                              onClick={() => handleEditCommentClick(comment.id)}
+                              style={{
+                                background: "transparent",
+                                border: "none",
+                                color:
+                                  hoveredButton === `editComment-${comment.id}`
+                                    ? "orange"
+                                    : "inherit",
+                              }}
+                              onMouseEnter={() =>
+                                setHoveredButton(`editComment-${comment.id}`)
+                              }
+                              onMouseLeave={() => setHoveredButton(null)}>
+                              <FontAwesomeIcon icon={faPen} />
+                            </button>
+                            <button
+                              className="button is-light is-small"
+                              onClick={() =>
+                                handleDeleteClick(comment.id, "hotel_comment")
+                              }
+                              style={{
+                                background: "transparent",
+                                border: "none",
+                                color:
+                                  hoveredButton ===
+                                  `deleteComment-${comment.id}`
+                                    ? "orange"
+                                    : "inherit",
+                              }}
+                              onMouseEnter={() =>
+                                setHoveredButton(`deleteComment-${comment.id}`)
+                              }
+                              onMouseLeave={() => setHoveredButton(null)}>
+                              X {/* Use "X" for delete comment */}
+                            </button>
+                          </div>
+                        </section>
                         {comment.image_url && (
                           <figure className="image is-128x128">
                             <img src={comment.image_url} alt="Review" />
                           </figure>
                         )}
-                        <div className="buttons">
-                          <button
-                            className="button is-small is-info"
-                            onClick={() => handleEditCommentClick(comment.id)}>
-                            Edit Comment
-                          </button>
-                          <button
-                            className="button is-small is-danger"
-                            onClick={() =>
-                              handleDeleteClick(comment.id, "hotel_comment")
-                            }>
-                            Delete Comment
-                          </button>
-                        </div>
                       </div>
                     ))
                   ) : (
@@ -160,18 +263,14 @@ function HotelList({ user }: { user: null | IUser }) {
                   )}
                   <div className="buttons is-centered mt-2">
                     <button
-                      className="button is-info"
-                      onClick={() => handleEditClick(post.id)}>
-                      Edit Hotel
-                    </button>
-                    <button
-                      className="button is-danger"
-                      onClick={() => handleDeleteClick(post.id, "hotel")}>
-                      Delete Hotel
-                    </button>
-                    <button
-                      className="button is-success"
-                      onClick={() => handleAddCommentClick(post.id)}>
+                      className="button is-light is-small"
+                      onClick={() => handleAddCommentClick(post.id)}
+                      style={{
+                        background: "transparent",
+                        border: "none",
+                        color: "white",
+                        fontSize: "0.8rem", // Smaller text
+                      }}>
                       Add Comment
                     </button>
                   </div>

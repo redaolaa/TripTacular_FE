@@ -3,11 +3,16 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../../config";
 import DeleteModal from "./DeleteDestModal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faPen,
+  faTrashAlt,
+  faPlusCircle,
+} from "@fortawesome/free-solid-svg-icons";
 
 interface IUser {
   id: number;
   username: string;
-  // Add other user properties as needed
 }
 
 type Comment = {
@@ -41,6 +46,9 @@ function DestinationList({ user }: { user: null | IUser }) {
     type: "comment" | "destination";
   } | null>(null);
   const navigate = useNavigate();
+
+  // Hover states for buttons and icons
+  const [hoveredButton, setHoveredButton] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchPosts() {
@@ -98,6 +106,14 @@ function DestinationList({ user }: { user: null | IUser }) {
     setItemToDelete(null);
   };
 
+  const handleMouseEnter = (buttonName: string) => {
+    setHoveredButton(buttonName);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredButton(null);
+  };
+
   if (error) {
     return <div className="notification is-danger">{error}</div>;
   }
@@ -112,15 +128,52 @@ function DestinationList({ user }: { user: null | IUser }) {
         <div className="has-text-centered mb-4">
           <button
             onClick={handleAddDestinationClick}
-            className="button is-primary">
-            Add Destination
+            className={`button is-primary is-rounded has-text-weight-bold ${
+              hoveredButton === "addDestination" ? "is-hovered" : ""
+            }`}
+            onMouseEnter={() => handleMouseEnter("addDestination")}
+            onMouseLeave={handleMouseLeave}>
+            <FontAwesomeIcon icon={faPlusCircle} />{" "}
+            {/* Font Awesome Plus Icon */}
+            &nbsp; Add Destination
           </button>
         </div>
 
         <div className="columns is-multiline">
           {posts.map((post) => (
             <div key={post.id} className="column is-one-third">
-              <div className="card">
+              <div className="card" style={{ position: "relative" }}>
+                <button
+                  className="delete is-danger"
+                  onClick={() => handleDeleteClick(post.id, "destination")}
+                  style={{
+                    position: "absolute",
+                    top: "10px",
+                    right: "10px",
+                    zIndex: 10,
+                  }}
+                  aria-label="Delete Destination"></button>
+                <button
+                  className="button is-light"
+                  onClick={() => handleEditClick(post.id)}
+                  onMouseEnter={() => handleMouseEnter(`edit-${post.id}`)}
+                  onMouseLeave={handleMouseLeave}
+                  style={{
+                    position: "absolute",
+                    top: "10px",
+                    right: "50px", // Adjust the position so it's next to the delete button
+                    zIndex: 10,
+                    border: "none", // Remove border
+                    backgroundColor: "transparent", // Make background transparent
+                    padding: 0, // Remove default padding
+                    color:
+                      hoveredButton === `edit-${post.id}`
+                        ? "orange"
+                        : "inherit",
+                  }}
+                  aria-label="Edit Destination">
+                  <FontAwesomeIcon icon={faPen} /> {/* Pen Icon for Edit */}
+                </button>
                 <div className="card-image">
                   <figure className="image is-4by3">
                     <img
@@ -133,31 +186,84 @@ function DestinationList({ user }: { user: null | IUser }) {
                   <h2 className="title is-4">
                     {post.city}, {post.country}
                   </h2>
+                  <p className="title is-6 has-text-left">Comments</p>{" "}
+                  {/* Section Title */}
                   {post.comments.length > 0 ? (
-                    post.comments.map((comment) => (
-                      <div key={comment.id} className="content">
-                        <p>{comment.review}</p>
-                        {comment.image_url && (
-                          <figure className="image is-128x128">
-                            <img src={comment.image_url} alt="Review" />
-                          </figure>
-                        )}
-                        <div className="buttons">
-                          <button
-                            className="button is-small is-info"
-                            onClick={() => handleEditCommentClick(comment.id)}>
-                            Edit Comment
-                          </button>
-                          <button
-                            className="button is-small is-danger"
-                            onClick={() =>
-                              handleDeleteClick(comment.id, "comment")
-                            }>
-                            Delete Comment
-                          </button>
+                    <div className="content">
+                      {post.comments.map((comment) => (
+                        <div
+                          key={comment.id}
+                          className="comment mb-3 p-3 border rounded"
+                          style={{
+                            borderColor: "#ddd",
+                            display: "flex",
+                            alignItems: "center",
+                          }}>
+                          <div className="mr-3">
+                            {comment.image_url && (
+                              <figure className="image is-128x128">
+                                <img src={comment.image_url} alt="Review" />
+                              </figure>
+                            )}
+                          </div>
+                          <div className="flex-grow-1">
+                            <div className="is-flex is-align-items-center">
+                              <p className="mr-auto">{comment.review}</p>
+                              <div className="buttons is-right ml-2">
+                                <button
+                                  className="button is-light is-small"
+                                  onClick={() =>
+                                    handleEditCommentClick(comment.id)
+                                  }
+                                  onMouseEnter={() =>
+                                    handleMouseEnter(
+                                      `editComment-${comment.id}`
+                                    )
+                                  }
+                                  onMouseLeave={handleMouseLeave}
+                                  style={{
+                                    background: "transparent",
+                                    border: "none",
+                                    color:
+                                      hoveredButton ===
+                                      `editComment-${comment.id}`
+                                        ? "orange"
+                                        : "inherit",
+                                  }} // Remove background and border
+                                >
+                                  <FontAwesomeIcon icon={faPen} />{" "}
+                                  {/* Pen Icon for Edit */}
+                                </button>
+                                <button
+                                  className="button is-light is-small"
+                                  onClick={() =>
+                                    handleDeleteClick(comment.id, "comment")
+                                  }
+                                  onMouseEnter={() =>
+                                    handleMouseEnter(
+                                      `deleteComment-${comment.id}`
+                                    )
+                                  }
+                                  onMouseLeave={handleMouseLeave}
+                                  style={{
+                                    background: "transparent",
+                                    border: "none",
+                                    color:
+                                      hoveredButton ===
+                                      `deleteComment-${comment.id}`
+                                        ? "orange"
+                                        : "inherit",
+                                  }} // Remove background and border
+                                >
+                                  <FontAwesomeIcon icon={faTrashAlt} />{" "}
+                                  {/* Delete Icon */}
+                                </button>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    ))
+                      ))}
+                    </div>
                   ) : (
                     <p className="content has-text-grey">
                       No reviews available for this destination.
@@ -165,19 +271,24 @@ function DestinationList({ user }: { user: null | IUser }) {
                   )}
                   <div className="buttons is-centered mt-2">
                     <button
-                      className="button is-info"
-                      onClick={() => handleEditClick(post.id)}>
-                      Edit Destination
-                    </button>
-                    <button
-                      className="button is-danger"
-                      onClick={() => handleDeleteClick(post.id, "destination")}>
-                      Delete Destination
-                    </button>
-                    <button
-                      className="button is-success"
-                      onClick={() => handleAddCommentClick(post.id)}>
-                      Add Comment
+                      className="button is-success is-small"
+                      onClick={() => handleAddCommentClick(post.id)}
+                      onMouseEnter={() =>
+                        handleMouseEnter(`addComment-${post.id}`)
+                      }
+                      onMouseLeave={handleMouseLeave}
+                      style={{
+                        background: "transparent", // Make the background transparent
+                        border: "none", // Remove border
+                        color:
+                          hoveredButton === `addComment-${post.id}`
+                            ? "white"
+                            : "inherit", // Set text color to white
+                        borderRadius: "5px", // Round the corners
+                        padding: "5px 10px", // Adjust padding for smaller size
+                      }}>
+                      <FontAwesomeIcon icon={faPlusCircle} /> {/* Add Icon */}
+                      &nbsp; Add Comment
                     </button>
                   </div>
                 </div>
@@ -187,7 +298,13 @@ function DestinationList({ user }: { user: null | IUser }) {
         </div>
 
         <div className="has-text-centered mt-5">
-          <button onClick={handleHomeClick} className="button is-primary">
+          <button
+            onClick={handleHomeClick}
+            className={`button is-primary ${
+              hoveredButton === "home" ? "is-hovered" : ""
+            }`}
+            onMouseEnter={() => handleMouseEnter("home")}
+            onMouseLeave={handleMouseLeave}>
             Go to Home
           </button>
         </div>

@@ -82,7 +82,7 @@ function CreateHotel({ user }: { user: null | IUser }) {
             </div>
           </div>
 
-          {/* Stars Field */}
+          {/* Stars */}
           <div className="field">
             <label htmlFor="stars" className="label">
               Hotel Stars (Rating)
@@ -122,7 +122,7 @@ function CreateHotel({ user }: { user: null | IUser }) {
             </div>
           </div>
 
-          {/* Image URL Field */}
+          {/* Image URL */}
           <div className="field">
             <label htmlFor="image_url" className="label">
               Image URL

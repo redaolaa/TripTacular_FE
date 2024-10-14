@@ -41,21 +41,16 @@ function Navbar({ user, setUser }: NavbarProps) {
               <Link to="/destinations" className="navbar-item">
                 Destinations
               </Link>
+              {/* Added the Hotels link */}
+              <Link to="/hotels" className="navbar-item">
+                Hotels
+              </Link>
               {user && (
                 <Link to="/createPost" className="navbar-item">
                   Create Tools
                 </Link>
               )}
-              {user && (
-                <>
-                <Link to="/blue-zone" className="navbar-item">
-                  Blue Zone
-                </Link> 
-                <Link to="/red-zone" className="navbar-item">Red Zone</Link>
-                <Link to="/yellow-zone" className="navbar-item">Yellow Zone</Link>
-                 <Link to="/green-zone" className="navbar-item">Green Zone</Link> 
-                 </>
-              )}
+
               {user && (
                 <button
                   onClick={logout}
@@ -63,7 +58,7 @@ function Navbar({ user, setUser }: NavbarProps) {
                   Logout
                 </button>
               )}
-             
+
               {user && (
                 <span className="navbar-item navbar-welcome">{`Welcome back ${user.username}`}</span>
               )}

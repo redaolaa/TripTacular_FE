@@ -25,7 +25,7 @@ function Login({ fetchUser }: { fetchUser: Function }) {
     e.preventDefault();
 
     try {
-      // Make sure to send formData which now includes username
+      // send formData which now includes username
       const response = await axios.post(`${baseUrl}/auth/login/`, formData);
 
       localStorage.setItem("token", response.data.token);
@@ -56,7 +56,7 @@ function Login({ fetchUser }: { fetchUser: Function }) {
             </div>
           </div>
 
-          {/* Username Field */}
+          {/* Username  */}
           <div className="field">
             <label htmlFor="username" className="label">
               Username
@@ -65,21 +65,21 @@ function Login({ fetchUser }: { fetchUser: Function }) {
               <input
                 type="text"
                 className="input"
-                name="username" // Ensure this matches the expected field in your backend
+                name="username" // Ensure this matches the expected field in my backend
                 value={formData.username} // Bind to username in formData
                 onChange={handleChange}
               />
             </div>
           </div>
 
-          {/* Password Field */}
+          {/* Password  */}
           <div className="field">
             <label htmlFor="password" className="label">
               Password
             </label>
             <div className="control">
               <input
-                type="password" // Changed to password type for security
+                type="password" 
                 className="input"
                 name="password"
                 value={formData.password}

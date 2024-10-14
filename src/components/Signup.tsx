@@ -15,8 +15,8 @@ function Signup() {
 
   const [errorData, setErrorData] = useState({
     email: "",
-    first_name: "", // Added error state for first name
-    last_name: "", // Added error state for last name
+    first_name: "", 
+    last_name: "", 
     username: "",
     password: "",
     password_confirmation: "", // Changed to match Django model field
@@ -51,7 +51,7 @@ function Signup() {
     <div className="section">
       <div className="container">
         <form onSubmit={handleSubmit}>
-          {/* Username Field */}
+          {/* Username */}
           <div className="field">
             <label htmlFor="username" className="label">
               Username
@@ -77,7 +77,7 @@ function Signup() {
             </label>
             <div className="control">
               <input
-                type="email" // Changed to email type for better validation
+                type="email" 
                 className="input"
                 name="email"
                 value={formData.email}
