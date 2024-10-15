@@ -13,7 +13,7 @@ import EditDestination from "./components/EditDestination";
 import { baseUrl } from "./config";
 import CreateDestComment from "./components/Destination/CreateDestComment";
 import HotelList from "./components/Hotel/HotelList";
-import CreateHotel from "./components/Hotel/createHotel";
+import CreateHotel from "./components/Hotel/CreateHotel";
 import CreateHotelComment from "./components/Hotel/CreateHotelComments";
 import EditHotel from "./components/Hotel/EditHotel";
 
