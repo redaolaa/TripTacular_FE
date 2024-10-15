@@ -132,7 +132,7 @@ function DestinationList() {
           {posts.map((post) => (
             <div key={post.id} className="column is-one-third">
               <div className="card" style={{ position: "relative" }}>
-                {/* Show Delete button only if user is logged in */}
+                {/* Show Delete button only if user is logged in using isLoggedIn */}
                 {isLoggedIn && (
                   <button
                     className="delete is-danger"
@@ -155,15 +155,15 @@ function DestinationList() {
                     style={{
                       position: "absolute",
                       top: "10px",
-                      right: "50px", // Adjust the position so it's next to the delete button
+                      right: "50px", 
                       zIndex: 10,
-                      border: "none", // Remove border
-                      backgroundColor: "transparent", // Make background transparent
-                      padding: 0, // Remove default padding
+                      border: "none",
+                      backgroundColor: "transparent", 
+                      padding: 0, 
                       color: hoveredButton === `edit-${post.id}` ? "orange" : "inherit",
                     }}
                     aria-label="Edit Destination">
-                    <FontAwesomeIcon icon={faPen} /> {/* Pen Icon for Edit */}
+                    <FontAwesomeIcon icon={faPen} /> 
                   </button>
                 )}
                 <div className="card-image">
@@ -176,7 +176,7 @@ function DestinationList() {
                     {post.city}, {post.country}
                   </h2>
                   <p className="title is-has-text-left">Comments</p>{" "}
-                  {/* Section Title */}
+
                   {post.comments.length > 0 ? (
                     <div className="content">
                       {post.comments.map((comment) => (
@@ -211,7 +211,7 @@ function DestinationList() {
                                       border: "none",
                                       color: hoveredButton === `editComment-${comment.id}` ? "orange" : "inherit",
                                     }}>
-                                    <FontAwesomeIcon icon={faPen} /> {/* Pen Icon for Edit */}
+                                    <FontAwesomeIcon icon={faPen} /> 
                                   </button>
                                 )}
                                 {/* Show Delete comment button only if user is logged in */}
@@ -226,7 +226,7 @@ function DestinationList() {
                                       border: "none",
                                       color: hoveredButton === `deleteComment-${comment.id}` ? "orange" : "inherit",
                                     }}>
-                                    <FontAwesomeIcon icon={faTrashAlt} /> {/* Delete Icon */}
+                                    <FontAwesomeIcon icon={faTrashAlt} /> {/* Delete */}
                                   </button>
                                 )}
                               </div>
@@ -249,11 +249,11 @@ function DestinationList() {
                         onMouseEnter={() => handleMouseEnter(`addComment-${post.id}`)}
                         onMouseLeave={handleMouseLeave}
                         style={{
-                          background: "transparent", // Make the background transparent
-                          border: "none", // Remove border
-                          color: hoveredButton === `addComment-${post.id}` ? "white" : "inherit", // Set text color to white
-                          borderRadius: "5px", // Round the corners
-                          padding: "5px 10px", // Adjust padding for smaller size
+                          background: "transparent", 
+                          border: "none", 
+                          color: hoveredButton === `addComment-${post.id}` ? "white" : "inherit",
+                          borderRadius: "5px", 
+                          padding: "5px 10px", 
                         }}>
                         <FontAwesomeIcon icon={faPlusCircle} /> {/* Add Icon */}
                         &nbsp; Add Comment

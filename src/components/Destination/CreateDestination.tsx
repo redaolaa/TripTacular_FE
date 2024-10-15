@@ -57,7 +57,8 @@ function CreateDestination({ user }: { user: null | IUser }) {
       <div className="container">
         <h1 className="title">Create a New Destination</h1>
         <form onSubmit={handleSubmit}>
-          {/* Country Field */}
+
+          {/* Country  */}
           <div className="field">
             <label htmlFor="country" className="label">
               Country
@@ -77,7 +78,7 @@ function CreateDestination({ user }: { user: null | IUser }) {
             </div>
           </div>
 
-          {/* City Field */}
+          {/* City */}
           <div className="field">
             <label htmlFor="city" className="label">
               City
@@ -97,7 +98,7 @@ function CreateDestination({ user }: { user: null | IUser }) {
             </div>
           </div>
 
-          {/* Date From Field */}
+          {/* Date From  */}
           <div className="field">
             <label htmlFor="date_from" className="label">
               Date From
@@ -116,7 +117,7 @@ function CreateDestination({ user }: { user: null | IUser }) {
             </div>
           </div>
 
-          {/* Date To Field */}
+          {/* Date To */}
           <div className="field">
             <label htmlFor="date_to" className="label">
               Date To
@@ -135,7 +136,7 @@ function CreateDestination({ user }: { user: null | IUser }) {
             </div>
           </div>
 
-          {/* Image URL Field */}
+          {/* Image */}
           <div className="field">
             <label htmlFor="image_url" className="label">
               Image URL

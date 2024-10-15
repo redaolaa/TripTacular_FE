@@ -57,7 +57,7 @@ function Navbar({ setUser }: NavbarProps) {
                 <>
                   <Link
                     to="/"
-                    className="navbar-item" // same className as other nav items
+                    className="navbar-item" 
                     onClick={logout}>
                     Logout
                   </Link>

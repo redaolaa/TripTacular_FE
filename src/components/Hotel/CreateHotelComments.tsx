@@ -33,7 +33,7 @@ function CreateHotelComment() {
         review: comment.review,
         image_url: comment.image_url || null,
         hotel: parseInt(id),
-        owner: 1, // Set owner to 1 as requested
+        owner: 1, // Set owner to 1 
       };
 
       console.log("Sending data:", commentData);

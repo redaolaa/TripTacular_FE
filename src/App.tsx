@@ -46,24 +46,24 @@ function App() {
 
   return (
     <Router>
-      <Navbar user={user} setUser={setUser} />
+      <Navbar  setUser={setUser} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login fetchUser={fetchUser} />} />
 
         {/* DESTINATIONS */}
-        <Route path="/destinations" element={<DestinationList user={user} />} />
+        <Route path="/destinations" element={<DestinationList  />} />
         <Route path="/createPost" element={<CreateDestination user={user} />} />
 
         <Route
           path="/editDestination/:id"
-          element={<EditDestination user={user} />}
+          element={<EditDestination  />}
         />
 
         <Route
           path="/createDestComment/:id"
-          element={<CreateDestComment user={user} />}
+          element={<CreateDestComment  />}
         />
 
         <Route
@@ -83,10 +83,10 @@ function App() {
 
         <Route
           path="/createHotelComment/:id"
-          element={<CreateHotelComment user={user} />}
+          element={<CreateHotelComment  />}
         />
 
-        <Route path="/editHotel/:id" element={<EditHotel user={user} />} />
+        <Route path="/editHotel/:id" element={<EditHotel  />} />
 
         <Route
           path="/editHotelComment/:id"

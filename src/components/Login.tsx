@@ -25,14 +25,14 @@ function Login({ fetchUser }: { fetchUser: Function }) {
     e.preventDefault();
 
     try {
-      // send formData which now includes username
+      
       const response = await axios.post(`${baseUrl}/auth/login/`, formData);
 
       localStorage.setItem("token", response.data.token);
       fetchUser();
       navigate("/");
     } catch (error: any) {
-      setErrorMessage(error.response.data.message || "An error occurred."); // Provide a default error message if none is provided
+      setErrorMessage(error.response.data.message || "An error occurred."); 
     }
   }
 
@@ -40,7 +40,7 @@ function Login({ fetchUser }: { fetchUser: Function }) {
     <div className="section">
       <div className="container">
         <form onSubmit={handleSubmit}>
-          {/* Email Field */}
+          {/* Email  */}
           <div className="field">
             <label htmlFor="email" className="label">
               Email
@@ -65,8 +65,8 @@ function Login({ fetchUser }: { fetchUser: Function }) {
               <input
                 type="text"
                 className="input"
-                name="username" // Ensure this matches the expected field in my backend
-                value={formData.username} // Bind to username in formData
+                name="username" 
+                value={formData.username} 
                 onChange={handleChange}
               />
             </div>

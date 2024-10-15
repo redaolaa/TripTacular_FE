@@ -45,7 +45,7 @@ function HotelList({ user }: { user: null | IUser }) {
     type: "hotel_comment" | "hotel";
   } | null>(null);
   const [hoveredButton, setHoveredButton] = useState<string | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false); // Track login state
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false); // Track login 
   const navigate = useNavigate();
 
   // Check if user is logged in based on token in localStorage

@@ -28,7 +28,7 @@ function DeleteModal({
       const endpoint =
         itemType === "comment"
           ? `${baseUrl}/destination_comments/${itemId}/`
-          : `${baseUrl}/destinations/${itemId}/`; // Correct endpoint for deleting destinations
+          : `${baseUrl}/destinations/${itemId}/`; // Corrected my endpoint for deleting destinations
 
       await axios.delete(endpoint, {
         headers: {

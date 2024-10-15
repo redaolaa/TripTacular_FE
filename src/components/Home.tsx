@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { baseUrl } from "../config";
+import "./Home.css";
+
 
 interface Destination {
   id: number;
@@ -119,40 +121,7 @@ function Home() {
         </div>
       </section>
 
-      <style jsx>{`
-        .homepage .card {
-          transition: all 0.3s ease;
-          border-radius: 8px;
-          overflow: hidden;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .homepage .card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-        .homepage .card-image img {
-          object-fit: cover;
-        }
-        .homepage .title.is-2 {
-          position: relative;
-          display: inline-block;
-        }
-        .homepage .title.is-2::after {
-          content: "";
-          position: absolute;
-          left: 0;
-          bottom: -10px;
-          width: 100%;
-          height: 3px;
-          background-color: #3273dc;
-        }
-        .homepage .button {
-          transition: all 0.3s ease;
-        }
-        .homepage .button:hover {
-          transform: scale(1.05);
-        }
-      `}</style>
+
     </div>
   );
 }

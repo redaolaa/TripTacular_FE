@@ -62,7 +62,7 @@ function CreateHotel({ user }: { user: null | IUser }) {
       <div className="container">
         <h1 className="title">Create a New Hotel</h1>
         <form onSubmit={handleSubmit}>
-          {/* Hotel Name Field */}
+          {/* Hotel Name */}
           <div className="field">
             <label htmlFor="name" className="label">
               Hotel Name
@@ -102,7 +102,7 @@ function CreateHotel({ user }: { user: null | IUser }) {
             </div>
           </div>
 
-          {/* Location Field */}
+          {/* Location  */}
           <div className="field">
             <label htmlFor="location" className="label">
               Location

@@ -6,11 +6,11 @@ import { baseUrl } from "../config";
 function Signup() {
   const [formData, setFormData] = useState({
     email: "",
-    first_name: "", // Added first name
-    last_name: "", // Added last name
+    first_name: "", 
+    last_name: "", 
     username: "",
     password: "",
-    password_confirmation: "", // Changed to match Django model field
+    password_confirmation: "", 
   });
 
   const [errorData, setErrorData] = useState({
@@ -19,7 +19,7 @@ function Signup() {
     last_name: "", 
     username: "",
     password: "",
-    password_confirmation: "", // Changed to match Django model field
+    password_confirmation: "", 
   });
 
   const navigate = useNavigate();
@@ -37,7 +37,6 @@ function Signup() {
     e.preventDefault();
 
     try {
-      // Make sure to post the updated formData with correct fields
       const response = await axios.post(`${baseUrl}/auth/register/`, formData);
       console.log(response.data);
       // Redirect to the login page upon successful signup
@@ -89,7 +88,7 @@ function Signup() {
             </div>
           </div>
 
-          {/* First Name Field */}
+          {/* First Name */}
           <div className="field">
             <label htmlFor="first_name" className="label">
               First Name
@@ -110,7 +109,7 @@ function Signup() {
             </div>
           </div>
 
-          {/* Last Name Field */}
+          {/* Last Name  */}
           <div className="field">
             <label htmlFor="last_name" className="label">
               Last Name
@@ -129,14 +128,14 @@ function Signup() {
             </div>
           </div>
 
-          {/* Password Field */}
+          {/* Password */}
           <div className="field">
             <label htmlFor="password" className="label">
               Password
             </label>
             <div className="control">
               <input
-                type="password" // Changed to password type for better security
+                type="password" 
                 className="input"
                 name="password"
                 value={formData.password}
@@ -148,16 +147,16 @@ function Signup() {
             </div>
           </div>
 
-          {/* Password Confirmation Field */}
+          {/* Password Confirmation  */}
           <div className="field">
             <label htmlFor="password_confirmation" className="label">
               Password Confirmation
             </label>
             <div className="control">
               <input
-                type="password" // Changed to password type for better security
+                type="password" 
                 className="input"
-                name="password_confirmation" // Changed to match Django model field
+                name="password_confirmation" 
                 value={formData.password_confirmation}
                 onChange={handleChange}
               />
